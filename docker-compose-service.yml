@@ -1,0 +1,77 @@
+# docker-compose-service.yml
+version: "3"
+services:
+  service_gateway:
+    # 会根据./services/gateway目录下的Dockerfile生成镜像
+    build: ./services/gateway
+    image: xxx-gateway:1.0
+    # 将容器内的端口映射到宿主机的端口
+    ports:
+      - "8080:8080"
+    # depends_on:
+    #   - service_nacos
+    #   - service_redis
+    external_links:
+      - service_redis:service_redis
+      - service_nacos:service_nacos
+      - service_mysql:service_mysql
+
+  service_auth:
+    build: ./services/auth
+    image: xxx-auth:1.0
+    ports:
+      - "9200:9200"
+    external_links:
+      - service_redis:service_redis
+      - service_nacos:service_nacos
+      - service_mysql:service_mysql
+
+  service_system:
+    build: ./services/system
+    image: xxx-system:1.0
+    ports:
+      - "9201:9201"
+    external_links:
+      - service_redis:service_redis
+      - service_nacos:service_nacos
+      - service_mysql:service_mysql
+
+  service_file:
+    build: ./services/file
+    image: xxx-file:1.0
+    ports:
+      - "9300:9300"
+    external_links:
+      - service_redis:service_redis
+      - service_nacos:service_nacos
+      - service_mysql:service_mysql
+
+  service_gen:
+    build: ./services/gen
+    image: xxx-gen:1.0
+    ports:
+      - "9202:9202"
+    external_links:
+      - service_redis:service_redis
+      - service_nacos:service_nacos
+      - service_mysql:service_mysql
+
+  service_job:
+    build: ./services/job
+    image: xxx-job:1.0
+    ports:
+      - "9203:9203"
+    external_links:
+      - service_redis:service_redis
+      - service_nacos:service_nacos
+      - service_mysql:service_mysql
+
+  service_monitor:
+    build: ./services/monitor
+    image: xxx-monitor:1.0
+    ports:
+      - "9100:9100"
+    external_links:
+      - service_redis:service_redis
+      - service_nacos:service_nacos
+      - service_mysql:service_mysql
