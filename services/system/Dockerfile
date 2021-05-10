@@ -1,7 +1,7 @@
 FROM java:8
 
-COPY . /usr/src/xxx/system
-WORKDIR /usr/src/xxx/system
+COPY . /usr/src/funadmin/system
+WORKDIR /usr/src/funadmin/system
 
-ENTRYPOINT ["java","-jar","xxx-modules-system.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","funadmin-modules-system.jar"]
 EXPOSE 9201

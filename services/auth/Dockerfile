@@ -1,7 +1,7 @@
 FROM java:8
 
-COPY . /usr/src/xxx/auth
-WORKDIR /usr/src/xxx/auth
+COPY . /usr/src/funadmin/auth
+WORKDIR /usr/src/funadmin/auth
 
-ENTRYPOINT ["java","-jar","xxx-auth.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","funadmin-auth.jar"]
 EXPOSE 9200

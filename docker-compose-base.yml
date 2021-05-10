@@ -2,21 +2,33 @@
 version: "3"
 services:
   service_nginx:
+    hostname: service_nginx
+    container_name: service_nginx
     image: nginx
     volumes:
       - ./nginx/conf.d/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/log:/var/log/nginx
-      - ./html:/usr/share/nginx/html/xxx-ui
+      - ./funadmin/html:/usr/share/nginx/html/funadmin-ui
     ports:
       - "80:80"
+    depends_on:
+      - service_mysql
     environment:
       - NGINX_HOST=tingyur.top
       - NGINX_PORT=80
+    networks:
+      - web_common
 
   service_redis:
+    hostname: service_redis
+    container_name: service_redis
     image: redis
     ports:
       - "6379:6379"
+    depends_on:
+      - service_nginx
+    networks:
+      - web_common
 
   # tomcat:
   #   image: tomcat
@@ -26,27 +38,9 @@ services:
   #     - service_nacos
   #     - service_redis
 
-  service_nacos:
-    image: nacos/nacos-server:2.0.0-bugfix
-    environment:
-      - PREFER_HOST_MODE=hostname
-      - MODE=standalone
-      - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=service_mysql
-      - MYSQL_SERVICE_DB_NAME=xxx-config
-      - MYSQL_SERVICE_PORT=3306
-      - MYSQL_SERVICE_USER=root
-      - MYSQL_SERVICE_PASSWORD=a123456
-    volumes:
-      - ./nacos/log/:/home/nacos/logs
-      - ./nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties
-    ports:
-      - "8848:8848"
-    depends_on:
-      - service_mysql
-    restart: on-failure
-
   service_mysql:
+    hostname: service_mysql
+    container_name: service_mysql
     image: mysql
     ports:
       - "3306:3306"
@@ -56,3 +50,34 @@ services:
       - ./mysql/init.d:/docker-entrypoint-initdb.d
       - ./mysql/db:/var/lib/mysql
     restart: on-failure
+    networks:
+      - web_common
+
+  service_nacos:
+    hostname: service_nacos
+    container_name: service_nacos
+    image: nacos/nacos-server:2.0.0-bugfix
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=service_mysql
+      - MYSQL_SERVICE_DB_NAME=funadmin_config
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=a123456
+      # - MYSQL_SERVICE_DB_PARAM=characterEncoding=utf8&connectTimeout=1000&socketTimeout=3000&autoReconnect=true&&useSSL=false
+    volumes:
+      - ./nacos/log/:/home/nacos/logs
+      - ./nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties
+    ports:
+      - "8848:8848"
+    depends_on:
+      - service_redis
+    restart: on-failure
+    networks:
+      - web_common
+
+networks:
+  web_common:
+    external: true

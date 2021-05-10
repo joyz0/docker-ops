@@ -2,9 +2,11 @@
 version: "3"
 services:
   service_gateway:
+    hostname: service_gateway
+    container_name: service_gateway
     # 会根据./services/gateway目录下的Dockerfile生成镜像
     build: ./services/gateway
-    image: xxx-gateway:1.0
+    image: funadmin-gateway:1.0
     # 将容器内的端口映射到宿主机的端口
     ports:
       - "8080:8080"
@@ -15,63 +17,78 @@ services:
       - service_redis:service_redis
       - service_nacos:service_nacos
       - service_mysql:service_mysql
+    networks:
+      - web_common
 
   service_auth:
+    container_name: service_auth
     build: ./services/auth
-    image: xxx-auth:1.0
+    image: funadmin-auth:1.0
     ports:
       - "9200:9200"
     external_links:
       - service_redis:service_redis
       - service_nacos:service_nacos
       - service_mysql:service_mysql
+    networks:
+      - web_common
 
   service_system:
+    container_name: service_system
     build: ./services/system
-    image: xxx-system:1.0
+    image: funadmin-system:1.0
     ports:
       - "9201:9201"
     external_links:
       - service_redis:service_redis
       - service_nacos:service_nacos
       - service_mysql:service_mysql
+    networks:
+      - web_common
 
-  service_file:
-    build: ./services/file
-    image: xxx-file:1.0
-    ports:
-      - "9300:9300"
-    external_links:
-      - service_redis:service_redis
-      - service_nacos:service_nacos
-      - service_mysql:service_mysql
+networks:
+  web_common:
+    external: true
+  # service_file:
+  #   container_name: service_file
+  #   build: ./services/file
+  #   image: funadmin-file:1.0
+  #   ports:
+  #     - "9300:9300"
+  #   external_links:
+  #     - service_redis:service_redis
+  #     - service_nacos:service_nacos
+  #     - service_mysql:service_mysql
 
-  service_gen:
-    build: ./services/gen
-    image: xxx-gen:1.0
-    ports:
-      - "9202:9202"
-    external_links:
-      - service_redis:service_redis
-      - service_nacos:service_nacos
-      - service_mysql:service_mysql
+  # service_gen:
+  #   container_name: service_gen
+  #   build: ./services/gen
+  #   image: funadmin-gen:1.0
+  #   ports:
+  #     - "9202:9202"
+  #   external_links:
+  #     - service_redis:service_redis
+  #     - service_nacos:service_nacos
+  #     - service_mysql:service_mysql
 
-  service_job:
-    build: ./services/job
-    image: xxx-job:1.0
-    ports:
-      - "9203:9203"
-    external_links:
-      - service_redis:service_redis
-      - service_nacos:service_nacos
-      - service_mysql:service_mysql
+  # service_job:
+  #   container_name: service_job
+  #   build: ./services/job
+  #   image: funadmin-job:1.0
+  #   ports:
+  #     - "9203:9203"
+  #   external_links:
+  #     - service_redis:service_redis
+  #     - service_nacos:service_nacos
+  #     - service_mysql:service_mysql
 
-  service_monitor:
-    build: ./services/monitor
-    image: xxx-monitor:1.0
-    ports:
-      - "9100:9100"
-    external_links:
-      - service_redis:service_redis
-      - service_nacos:service_nacos
-      - service_mysql:service_mysql
+  # service_monitor:
+  #   container_name: service_monitor
+  #   build: ./services/monitor
+  #   image: funadmin-monitor:1.0
+  #   ports:
+  #     - "9100:9100"
+  #   external_links:
+  #     - service_redis:service_redis
+  #     - service_nacos:service_nacos
+  #     - service_mysql:service_mysql

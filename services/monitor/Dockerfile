@@ -1,7 +1,7 @@
 FROM java:8
 
-COPY . /usr/src/xxx/monitor
-WORKDIR /usr/src/xxx/monitor
+COPY . /usr/src/funadmin/monitor
+WORKDIR /usr/src/funadmin/monitor
 
-ENTRYPOINT ["java","-jar","xxx-visual-monitor.jar"]
+ENTRYPOINT ["java","-Dspring.profiles.active=prod","-jar","funadmin-visual-monitor.jar"]
 EXPOSE 9100
