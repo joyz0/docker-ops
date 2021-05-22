@@ -9,6 +9,7 @@ services:
       - ./nginx/conf.d/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/cert:/etc/nginx/cert
       - ./nginx/log:/var/log/nginx
+      - ./nginx/favicon.ico:/usr/share/nginx/html/favicon.ico
       - ./funadmin/html:/usr/share/nginx/html/funadmin-ui
       - ./reactcases/html:/usr/share/nginx/html/reactcases-ui
     ports:
