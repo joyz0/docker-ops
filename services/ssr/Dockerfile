@@ -1,4 +1,4 @@
-FROM node:14-alpine
+FROM node:14
 
 WORKDIR /usr/src/reactcases/node
 
@@ -6,10 +6,10 @@ COPY package.json .
 
 RUN npm install --production
 
+COPY . .
+
 RUN npm run build
 
-COPY ./dist .
-
-EXPOSE 7002
+EXPOSE 7001
 
 CMD [ "npm", "start" ]

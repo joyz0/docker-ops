@@ -1,15 +1,15 @@
 # docker-compose-service.yml
 version: "3"
 services:
-  servive_reactcases_ssr:
-    hostname: servive_reactcases_ssr
-    container_name: servive_reactcases_ssr
+  service_reactcases_ssr:
+    hostname: service_reactcases_ssr
+    container_name: service_reactcases_ssr
     build: ./services/reactcases_ssr
     image: reactcases-ssr:1.0
     volumes:
       - ./ssr_html:/usr/src/reactcases/ssr_html
     ports:
-      - "7002:7002"
+      - "7001:7001"
     networks:
       - web_common
 
