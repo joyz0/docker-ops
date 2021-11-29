@@ -1,5 +1,5 @@
 # docker-compose-base.yml
-version: "3"
+version: '3'
 services:
   service_nginx:
     hostname: service_nginx
@@ -12,9 +12,11 @@ services:
       - ./nginx/favicon.ico:/usr/share/nginx/html/favicon.ico
       - ./funadmin/html:/usr/share/nginx/html/funadmin-ui
       - ./reactcases/html:/usr/share/nginx/html/reactcases-ui
+      - ./ecmcloud/html/root:/usr/share/nginx/html/ecmcloud-root
+      - ./ecmcloud/html/business:/usr/share/nginx/html/ecmcloud-business
     ports:
-      - "80:80"
-      - "443:443"
+      - '80:80'
+      - '443:443'
     depends_on:
       - service_mysql
     environment:
@@ -28,7 +30,7 @@ services:
     container_name: service_redis
     image: redis
     ports:
-      - "6379:6379"
+      - '6379:6379'
     depends_on:
       - service_nginx
     networks:
@@ -47,7 +49,7 @@ services:
     container_name: service_mysql
     image: mysql
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
       - MYSQL_ROOT_PASSWORD=a123456
     volumes:
@@ -75,7 +77,7 @@ services:
       - ./nacos/log/:/home/nacos/logs
       - ./nacos/init.d/custom.properties:/home/nacos/init.d/custom.properties
     ports:
-      - "8848:8848"
+      - '8848:8848'
     depends_on:
       - service_redis
     restart: on-failure
